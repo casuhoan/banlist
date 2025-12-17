@@ -1,0 +1,23 @@
+[
+    {
+        "id": "commander-centurion",
+        "name": "Commander Centurion",
+        "description": "Variante 1v1 del Commander con 25 punti vita e banlist specifica.",
+        "rules": "# Regolamento Centurion\n\n1. Si gioca 1v1.\n2. 25 Punti vita.\n3. Non c'è danno da comandante.",
+        "bannedCards": [
+            "Sol Ring",
+            "Mana Crypt",
+            "Necropotence"
+        ]
+    },
+    {
+        "id": "tiny-leaders",
+        "name": "Tiny Leaders",
+        "description": "Commander con mazzi da 50 carte e costo convertito di mana <= 3.",
+        "rules": "# Regolamento Tiny Leaders\n\n1. Max CMC 3.\n2. 50 Carte.",
+        "bannedCards": [
+            "Black Lotus",
+            "Mox Sapphire"
+        ]
+    }
+]
