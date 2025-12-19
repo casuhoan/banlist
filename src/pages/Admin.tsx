@@ -45,6 +45,29 @@ const Admin: React.FC = () => {
         }
     };
 
+    const handleAddFormat = () => {
+        const name = prompt("Nome del nuovo formato:");
+        if (name) {
+            const newFormat: Format = {
+                id: name.toLowerCase().replace(/\s+/g, '-'),
+                name: name,
+                description: "Nuova descrizione",
+                rules: "# Regolamento",
+                bannedCards: []
+            };
+            setFormats(prev => [...prev, newFormat]);
+            setActiveFormatId(newFormat.id);
+        }
+    };
+
+    const handleDeleteFormat = () => {
+        if (!activeFormat) return;
+        if (confirm(`Sei sicuro di voler eliminare il formato "${activeFormat.name}" completo?`)) {
+            setFormats(prev => prev.filter(f => f.id !== activeFormatId));
+            setActiveFormatId('');
+        }
+    };
+
     const handleExport = () => {
         const dataStr = JSON.stringify(formats, null, 2);
         const blob = new Blob([dataStr], { type: "application/json" });
@@ -129,6 +152,13 @@ const Admin: React.FC = () => {
                                         {f.name}
                                     </button>
                                 ))}
+                                <button
+                                    onClick={handleAddFormat}
+                                    className="w-full flex items-center justify-center space-x-2 text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/10 px-4 py-3 rounded-lg transition-colors border border-dashed border-indigo-500/30 mt-2"
+                                >
+                                    <Plus className="h-4 w-4" />
+                                    <span>Nuovo Formato</span>
+                                </button>
                             </div>
 
                             {/* Editor Area */}
