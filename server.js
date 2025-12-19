@@ -52,7 +52,7 @@ app.post('/api/formats', (req, res) => {
 });
 
 // Catch-all handler for SPA (Must be last)
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
