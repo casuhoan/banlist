@@ -4,6 +4,7 @@ export interface Format {
     description: string;
     rules: string;
     bannedCards: string[];
+    unbannedCards?: string[];
 }
 
 export interface ScryfallCard {

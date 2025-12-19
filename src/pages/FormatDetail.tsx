@@ -65,6 +65,19 @@ const FormatDetail: React.FC = () => {
                     <div className="bg-slate-900/30 rounded-2xl p-6 border border-white/5">
                         <CardGrid cardNames={format.bannedCards} />
                     </div>
+
+                    {format.unbannedCards && format.unbannedCards.length > 0 && (
+                        <>
+                            <div className="flex items-center space-x-2 mb-4 text-green-400 pt-6 border-t border-white/10">
+                                <BookOpen className="h-6 w-6" />
+                                <h2 className="text-xl font-bold">Carte Sbannate ({format.unbannedCards.length})</h2>
+                            </div>
+
+                            <div className="bg-slate-900/30 rounded-2xl p-6 border border-white/5">
+                                <CardGrid cardNames={format.unbannedCards} />
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

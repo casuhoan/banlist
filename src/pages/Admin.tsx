@@ -52,6 +52,23 @@ const Admin: React.FC = () => {
         }
     };
 
+    const handleAddUnbannedCard = () => {
+        const cardName = prompt("Inserisci il nome esatto della carta (Inglese):");
+        if (cardName && activeFormat) {
+            setFormats(prev => prev.map(f =>
+                f.id === activeFormatId ? { ...f, unbannedCards: [...(f.unbannedCards || []), cardName] } : f
+            ));
+        }
+    };
+
+    const handleRemoveUnbannedCard = (cardName: string) => {
+        if (confirm(`Rimuovere ${cardName} dalle carte sbannate?`)) {
+            setFormats(prev => prev.map(f =>
+                f.id === activeFormatId ? { ...f, unbannedCards: (f.unbannedCards || []).filter(c => c !== cardName) } : f
+            ));
+        }
+    };
+
     const handleAddFormat = () => {
         const name = prompt("Nome del nuovo formato:");
         if (name) {
@@ -230,6 +247,25 @@ const Admin: React.FC = () => {
                                                     <div key={`${card}-${idx}`} className="flex items-center justify-between bg-white/5 px-3 py-1.5 rounded text-sm text-gray-300 group hover:bg-white/10">
                                                         <span>{card}</span>
                                                         <button onClick={() => handleRemoveCard(card)} className="text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
+                                                            <Trash2 className="h-4 w-4" />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-xs text-green-500 uppercase font-bold">Carte Sbannate ({activeFormat.unbannedCards?.length || 0})</label>
+                                                <button onClick={handleAddUnbannedCard} className="text-xs flex items-center space-x-1 text-green-400 hover:text-green-300">
+                                                    <Plus className="h-3 w-3" /> <span>Aggiungi Carta</span>
+                                                </button>
+                                            </div>
+                                            <div className="bg-slate-950 border border-white/10 rounded-lg p-2 max-h-60 overflow-y-auto grid grid-cols-2 gap-2">
+                                                {(activeFormat.unbannedCards || []).map((card, idx) => (
+                                                    <div key={`${card}-${idx}`} className="flex items-center justify-between bg-white/5 px-3 py-1.5 rounded text-sm text-gray-300 group hover:bg-white/10">
+                                                        <span>{card}</span>
+                                                        <button onClick={() => handleRemoveUnbannedCard(card)} className="text-gray-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
                                                             <Trash2 className="h-4 w-4" />
                                                         </button>
                                                     </div>
