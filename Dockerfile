@@ -16,9 +16,10 @@ COPY package*.json ./
 COPY server.js ./
 # Install ONLY production dependencies (express)
 RUN npm install --omit=dev
-# Create directory for data persistence
-RUN mkdir data
-COPY src/data/formats.json ./data/formats.json
+# Create directory for data persistence and set permissions
+RUN mkdir data && chown -R node:node /app
+COPY --chown=node:node src/data/formats.json ./data/formats.json
+USER node
 
 EXPOSE 80
 CMD ["node", "server.js"]
