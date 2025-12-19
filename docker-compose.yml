@@ -1,0 +1,8 @@
+services:
+  banlist-app:
+    build: .
+    image: ghcr.io/${GITHUB_REPOSITORY:-tuo-username/banlist}:latest
+    container_name: mtg-banlist
+    ports:
+      - "8083:80"
+    restart: unless-stopped
