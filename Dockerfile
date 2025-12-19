@@ -2,8 +2,9 @@
 FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
+# Ensure typescript is available or simply run build which uses local node_modules binary
 RUN npm run build
 
 # Serve Stage
