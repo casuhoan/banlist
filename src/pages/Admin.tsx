@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Save, Plus, Trash2, Smartphone, AlertTriangle, Lock } from 'lucide-react';
-import initialFormats from '../data/formats.json';
 import type { Format } from '../types';
+import { fetchFormats, saveFormats } from '../services/api';
 
 const Admin: React.FC = () => {
-    const [formats, setFormats] = useState<Format[]>(initialFormats);
-    const [activeFormatId, setActiveFormatId] = useState<string>(formats[0]?.id || '');
+    const [formats, setFormats] = useState<Format[]>([]);
+    const [activeFormatId, setActiveFormatId] = useState<string>('');
+    useEffect(() => {
+        fetchFormats().then(data => {
+            setFormats(data);
+            if (data.length > 0) setActiveFormatId(data[0].id);
+        });
+    }, []);
+
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false);
@@ -68,16 +75,24 @@ const Admin: React.FC = () => {
         }
     };
 
-    const handleExport = () => {
-        const dataStr = JSON.stringify(formats, null, 2);
-        const blob = new Blob([dataStr], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = "formats.json";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    const handleExport = async () => {
+        // Old export function replaced by API Save
+        const success = await saveFormats(formats);
+        if (success) {
+            alert("Salvato con successo sul server!");
+        } else {
+            // Fallback for download if API fails
+            const dataStr = JSON.stringify(formats, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = "formats.json";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            alert("Errore salvataggio server. Scaricato file di backup.");
+        }
     };
 
     return (
@@ -135,7 +150,7 @@ const Admin: React.FC = () => {
                                 className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg transition-colors shadow-lg shadow-indigo-500/20"
                             >
                                 <Save className="h-4 w-4" />
-                                <span>Download Config</span>
+                                <span>Salva Modifiche</span>
                             </button>
                         </header>
 
@@ -224,10 +239,10 @@ const Admin: React.FC = () => {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-start space-x-2 bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-lg text-yellow-200 text-sm">
+                                        <div className="flex items-start space-x-2 bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg text-blue-200 text-sm">
                                             <AlertTriangle className="h-5 w-5 flex-shrink-0" />
                                             <p>
-                                                Ricorda di cliccare su <strong>Download Config</strong> e sostituire il file <code>src/data/formats.json</code> nel repository per applicare le modifiche.
+                                                Le modifiche vengono salvate direttamente sul server.
                                             </p>
                                         </div>
                                     </>

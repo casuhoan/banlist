@@ -1,17 +1,25 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { ArrowLeft, BookOpen, Ban } from 'lucide-react';
-import formats from '../data/formats.json';
 import type { Format } from '../types';
 import CardGrid from '../components/CardGrid';
+import { fetchFormats } from '../services/api';
 
 const FormatDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const [format, setFormat] = useState<Format | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    const format = useMemo(() => {
-        return (formats as Format[]).find(f => f.id === id);
+    useEffect(() => {
+        fetchFormats().then(formats => {
+            const found = formats.find(f => f.id === id);
+            setFormat(found || null);
+            setLoading(false);
+        });
     }, [id]);
+
+    if (loading) return <div className="text-center py-20 text-white">Caricamento...</div>;
 
     if (!format) {
         return (

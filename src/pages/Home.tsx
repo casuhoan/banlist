@@ -1,10 +1,21 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Sword } from 'lucide-react';
-import formats from '../data/formats.json';
 import type { Format } from '../types';
+import { fetchFormats } from '../services/api';
 
 const Home: React.FC = () => {
+    const [formats, setFormats] = useState<Format[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchFormats().then(data => {
+            setFormats(data);
+            setLoading(false);
+        });
+    }, []);
+
+    if (loading) return <div className="text-center py-20 text-white">Caricamento formati...</div>;
     return (
         <div className="space-y-8">
             <header className="text-center py-12 space-y-4">

@@ -8,8 +8,17 @@ COPY . .
 RUN npx vite build
 
 # Serve Stage
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Serve Stage
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY package*.json ./
+COPY server.js ./
+# Install ONLY production dependencies (express)
+RUN npm install --omit=dev
+# Create directory for data persistence
+RUN mkdir data
+COPY src/data/formats.json ./data/formats.json
+
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server.js"]
