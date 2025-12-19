@@ -76,12 +76,10 @@ const Admin: React.FC = () => {
     };
 
     const handleExport = async () => {
-        // Old export function replaced by API Save
         const success = await saveFormats(formats);
         if (success) {
             alert("Salvato con successo sul server!");
         } else {
-            // Fallback for download if API fails
             const dataStr = JSON.stringify(formats, null, 2);
             const blob = new Blob([dataStr], { type: "application/json" });
             const url = URL.createObjectURL(blob);
@@ -239,15 +237,34 @@ const Admin: React.FC = () => {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-start space-x-2 bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg text-blue-200 text-sm">
-                                            <AlertTriangle className="h-5 w-5 flex-shrink-0" />
-                                            <p>
-                                                Le modifiche vengono salvate direttamente sul server.
-                                            </p>
+                                        <div className="flex items-center justify-between pt-6 border-t border-white/5">
+                                            <div className="flex items-start space-x-2 bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg text-blue-200 text-sm max-w-xl">
+                                                <AlertTriangle className="h-5 w-5 flex-shrink-0" />
+                                                <p>
+                                                    Le modifiche vengono salvate direttamente sul server.
+                                                </p>
+                                            </div>
+
+                                            <button
+                                                onClick={handleDeleteFormat}
+                                                className="flex items-center space-x-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 px-4 py-2 rounded-lg transition-colors"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                                <span>Elimina Formato</span>
+                                            </button>
                                         </div>
                                     </>
                                 ) : (
-                                    <div className="flex items-center justify-center h-full text-gray-500">Seleziona un formato</div>
+                                    <div className="flex flex-col items-center justify-center h-full text-gray-500 space-y-4">
+                                        <p>Seleziona un formato o creane uno nuovo</p>
+                                        <button
+                                            onClick={handleAddFormat}
+                                            className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg transition-colors"
+                                        >
+                                            <Plus className="h-4 w-4" />
+                                            <span>Nuovo Formato</span>
+                                        </button>
+                                    </div>
                                 )}
                             </div>
                         </div>
