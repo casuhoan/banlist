@@ -20,9 +20,13 @@ RUN npm install --omit=dev
 RUN mkdir data && chown -R node:node /app
 COPY --chown=node:node src/data/formats.json ./data/formats.json
 
-# Fix for Portainer caching old Nginx entrypoint
-# We create a dummy entrypoint script because Portainer might still try to run /docker-entrypoint.sh
+# Fix for Portainer caching old Nginx entrypoint and command
+# If Portainer tries to run "nginx" (old command), we intercept it and run "node server.js" instead
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
+    echo 'if [ "$1" = "nginx" ]; then' >> /docker-entrypoint.sh && \
+    echo '  echo "Detected old Nginx command. Switching to Node.js server..."' >> /docker-entrypoint.sh && \
+    echo '  exec node server.js' >> /docker-entrypoint.sh && \
+    echo 'fi' >> /docker-entrypoint.sh && \
     echo 'exec "$@"' >> /docker-entrypoint.sh && \
     chmod +x /docker-entrypoint.sh
 
