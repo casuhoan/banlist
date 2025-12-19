@@ -5,4 +5,9 @@ services:
     container_name: mtg-banlist
     ports:
       - "8083:80"
+    volumes:
+      - banlist_data:/app/data
     restart: unless-stopped
+
+volumes:
+  banlist_data:

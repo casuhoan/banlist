@@ -25,6 +25,7 @@ COPY --chown=node:node src/data/formats.json ./data/formats.json
 RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
     echo 'if [ "$1" = "nginx" ]; then' >> /docker-entrypoint.sh && \
     echo '  echo "Detected old Nginx command. Switching to Node.js server..."' >> /docker-entrypoint.sh && \
+    echo '  cd /app' >> /docker-entrypoint.sh && \
     echo '  exec node server.js' >> /docker-entrypoint.sh && \
     echo 'fi' >> /docker-entrypoint.sh && \
     echo 'exec "$@"' >> /docker-entrypoint.sh && \
