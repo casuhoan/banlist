@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 # Ensure typescript is available or simply run build which uses local node_modules binary
-RUN npm run build
+RUN npx vite build
 
 # Serve Stage
 FROM nginx:alpine
